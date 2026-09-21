@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional Matrix Operation System Dashboard for linear algebra calculations including addition, subtraction, multiplication, and transpose.">
+  <title>Matrix Operation System | Web Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <span>[M]</span>
+        </div>
+        <div class="brand-text">
+          <h1>Matrix Operation System</h1>
+          <p class="subtitle">Object-Oriented Linear Algebra Web Dashboard</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-primary">College Project Edition</span>
+        <span class="badge badge-secondary">C++ &amp; Web Stack</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Operation Selector Tabs -->
+    <nav class="operation-tabs" aria-label="Matrix Operations Navigation">
+      <button class="tab-btn active" id="tab-add" data-op="add">
+        <span class="tab-icon">+</span>
+        <span class="tab-label">Matrix Addition</span>
+      </button>
+      <button class="tab-btn" id="tab-sub" data-op="sub">
+        <span class="tab-icon">&minus;</span>
+        <span class="tab-label">Matrix Subtraction</span>
+      </button>
+      <button class="tab-btn" id="tab-mul" data-op="mul">
+        <span class="tab-icon">&times;</span>
+        <span class="tab-label">Matrix Multiplication</span>
+      </button>
+      <button class="tab-btn" id="tab-trans" data-op="trans">
+        <span class="tab-icon">A<sup>T</sup></span>
+        <span class="tab-label">Matrix Transpose</span>
+      </button>
+    </nav>
+
+    <!-- Operation Info Banner -->
+    <section class="op-info-card" id="op-info-banner">
+      <div class="op-info-content">
+        <h2 id="op-title">Matrix Addition</h2>
+        <p id="op-description">Computes element-wise sum of two matrices. Both matrices must have identical dimensions ($r_A = r_B$ and $c_A = c_B$).</p>
+      </div>
+      <div class="op-dimension-rule" id="op-rule">
+        <span class="rule-label">Dimension Rule</span>
+        <span class="rule-value" id="rule-text">Dim(A) == Dim(B)</span>
+      </div>
+    </section>
+
+    <!-- Dimension Configuration Section -->
+    <section class="dimension-config-card">
+      <div class="config-header">
+        <h3>Matrix Dimensions Configuration</h3>
+        <div class="quick-presets">
+          <span class="preset-label">Presets:</span>
+          <button type="button" class="preset-btn" id="preset-2x2">2 &times; 2</button>
+          <button type="button" class="preset-btn" id="preset-3x3">3 &times; 3</button>
+          <button type="button" class="preset-btn" id="preset-2x3-3x2">2&times;3 &amp; 3&times;2</button>
+        </div>
+      </div>
+
+      <div class="dimension-selectors-grid">
+        <!-- Matrix A Dimensions -->
+        <div class="dim-box" id="dim-box-a">
+          <h4>Matrix A Dimensions</h4>
+          <div class="dim-inputs">
+            <div class="input-group">
+              <label for="rows-a">Rows (r<sub>A</sub>):</label>
+              <input type="number" id="rows-a" min="1" max="6" value="2">
+            </div>
+            <span class="dim-times">&times;</span>
+            <div class="input-group">
+              <label for="cols-a">Cols (c<sub>A</sub>):</label>
+              <input type="number" id="cols-a" min="1" max="6" value="2">
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrix B Dimensions (Hidden for Transpose) -->
+        <div class="dim-box" id="dim-box-b">
+          <h4>Matrix B Dimensions</h4>
+          <div class="dim-inputs">
+            <div class="input-group">
+              <label for="rows-b">Rows (r<sub>B</sub>):</label>
+              <input type="number" id="rows-b" min="1" max="6" value="2">
+            </div>
+            <span class="dim-times">&times;</span>
+            <div class="input-group">
+              <label for="cols-b">Cols (c<sub>B</sub>):</label>
+              <input type="number" id="cols-b" min="1" max="6" value="2">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Matrix Inputs Section -->
+    <section class="matrices-workspace">
+      <div class="workspace-grid" id="workspace-grid">
+        <!-- Matrix A Input Card -->
+        <div class="matrix-card" id="card-matrix-a">
+          <div class="matrix-card-header">
+            <h4>Matrix A <span class="dim-tag" id="tag-dim-a">(2 &times; 2)</span></h4>
+            <div class="card-tools">
+              <button type="button" class="tool-btn" id="btn-sample-a" title="Fill Sample Numbers">Fill Sample</button>
+              <button type="button" class="tool-btn" id="btn-clear-a" title="Clear All Cells">Clear</button>
+            </div>
+          </div>
+          <div class="matrix-bracket-wrapper">
+            <div class="matrix-bracket left"></div>
+            <div class="matrix-grid-container" id="grid-a">
+              <!-- Dynamically populated via JS -->
+            </div>
+            <div class="matrix-bracket right"></div>
+          </div>
+        </div>
+
+        <!-- Operator Visual Indicator -->
+        <div class="operator-divider" id="operator-divider">
+          <span class="op-symbol" id="display-op-symbol">+</span>
+        </div>
+
+        <!-- Matrix B Input Card -->
+        <div class="matrix-card" id="card-matrix-b">
+          <div class="matrix-card-header">
+            <h4>Matrix B <span class="dim-tag" id="tag-dim-b">(2 &times; 2)</span></h4>
+            <div class="card-tools">
+              <button type="button" class="tool-btn" id="btn-sample-b" title="Fill Sample Numbers">Fill Sample</button>
+              <button type="button" class="tool-btn" id="btn-clear-b" title="Clear All Cells">Clear</button>
+            </div>
+          </div>
+          <div class="matrix-bracket-wrapper">
+            <div class="matrix-bracket left"></div>
+            <div class="matrix-grid-container" id="grid-b">
+              <!-- Dynamically populated via JS -->
+            </div>
+            <div class="matrix-bracket right"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Control Bar -->
+      <div class="action-bar">
+        <button type="button" class="btn btn-primary" id="btn-calculate">
+          <span class="btn-icon">&#9658;</span> Calculate Result
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-fill-all">
+          <span class="btn-icon">&#9881;</span> Fill All Sample Data
+        </button>
+        <button type="button" class="btn btn-outline-danger" id="btn-reset">
+          <span class="btn-icon">&#8635;</span> Reset / Clear All
+        </button>
+      </div>
+
+      <!-- Alert Box for Error / Validation Messages -->
+      <div class="alert-container" id="alert-container" style="display: none;">
+        <div class="alert alert-danger" id="alert-box">
+          <span class="alert-icon">&#9888;</span>
+          <div class="alert-content">
+            <strong id="alert-title">Dimension Incompatible:</strong>
+            <span id="alert-message">Matrices must have identical dimensions for addition.</span>
+          </div>
+          <button type="button" class="alert-close" id="btn-close-alert">&times;</button>
+        </div>
+      </div>
+
+      <!-- Result Section -->
+      <section class="result-section" id="result-section" style="display: none;">
+        <div class="result-card">
+          <div class="result-card-header">
+            <div class="result-title-group">
+              <span class="result-status-dot"></span>
+              <h3>Calculation Result</h3>
+              <span class="dim-tag" id="tag-result-dim">(2 &times; 2)</span>
+            </div>
+            <div class="result-op-badge" id="result-op-badge">Result = A + B</div>
+          </div>
+
+          <div class="result-body">
+            <div class="matrix-bracket-wrapper result-matrix-wrapper">
+              <div class="matrix-bracket left result-bracket"></div>
+              <div class="result-matrix-grid" id="grid-result">
+                <!-- Result cells generated via JS -->
+              </div>
+              <div class="matrix-bracket right result-bracket"></div>
+            </div>
+          </div>
+
+          <div class="result-footer" id="result-details">
+            <span id="result-summary-text">Calculated successfully using standard matrix arithmetic.</span>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Architecture & Educational Info Card -->
+    <section class="educational-card">
+      <h3>System Architecture &amp; OOP Foundations</h3>
+      <div class="edu-grid">
+        <div class="edu-item">
+          <h4>Encapsulated State</h4>
+          <p>The system models matrices using an object-oriented <code>Matrix</code> class containing rows, columns, and a 2D data store with strict accessor methods.</p>
+        </div>
+        <div class="edu-item">
+          <h4>Dimension Validation</h4>
+          <p>Pre-execution checks enforce linear algebra rules ($r_A == r_B$ for addition/subtraction, $c_A == r_B$ for multiplication).</p>
+        </div>
+        <div class="edu-item">
+          <h4>Immutability &amp; Purity</h4>
+          <p>Mathematical operations do not mutate the input operands; each calculation returns a newly allocated <code>Matrix</code> result object.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Clean Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>Matrix Operation System &bull; College OOP Demonstration Dashboard &bull; Standard C++ &amp; Web Edition</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
